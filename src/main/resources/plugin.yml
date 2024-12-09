@@ -1,0 +1,7 @@
+name: BrilliantTotem
+version: '1.0'
+main: Rice.Chen.BrilliantTotem.TotemPlugin
+api-version: '1.20'
+description: A plugin that allows totem effects to trigger from inventory
+author: RiceChen
+folia-supported: true
