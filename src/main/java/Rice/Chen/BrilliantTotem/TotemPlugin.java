@@ -27,6 +27,7 @@ public class TotemPlugin extends JavaPlugin implements Listener {
         getLogger().info("BrilliantTotem has been disabled!");
     }
 
+    // 檢測伺服器是否為 Folia，以適配不同的調度器。
     private boolean checkFolia() {
         try {
             Class.forName("io.papermc.paper.threadedregions.RegionizedServer");
@@ -36,6 +37,7 @@ public class TotemPlugin extends JavaPlugin implements Listener {
         }
     }
 
+    // 優先級為 HIGH，確保該插件的處理優先於其他插件。監聽玩家復活事件。
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerResurrect(EntityResurrectEvent event) {
         if (!(event.getEntity() instanceof Player player)) return;
@@ -44,13 +46,13 @@ public class TotemPlugin extends JavaPlugin implements Listener {
         ItemStack mainHand = inventory.getItemInMainHand();
         ItemStack offHand = inventory.getItemInOffHand();
         
-        // 如果手上有圖騰，讓原版處理
+        // 如果手上有圖騰，使用原版處理方式
         if (mainHand.getType() == Material.TOTEM_OF_UNDYING || 
             offHand.getType() == Material.TOTEM_OF_UNDYING) {
             return;
         }
         
-        // 取消原版處理，改用我們的邏輯
+        // 否則，取消原版處理，使用插件處理方式
         event.setCancelled(true);
         
         // 檢查背包和快捷欄
@@ -102,6 +104,7 @@ public class TotemPlugin extends JavaPlugin implements Listener {
         }
     }
     
+    // 處理圖騰消耗邏輯，如果數量大於 1 個，則減少 1 個，否則移除物品。
     private boolean consumeTotemAtSlot(PlayerInventory inventory, int slot) {
         ItemStack item = inventory.getItem(slot);
         if (isTotem(item)) {
@@ -116,6 +119,7 @@ public class TotemPlugin extends JavaPlugin implements Listener {
         return false;
     }
 
+    // 設置生命值和清除燃燒效果，根據伺服器類型（Folia/Paper）選擇不同的效果應用方式。
     private void processResurrection(Player player) {
         player.setHealth(1.0);
         player.setFireTicks(0);
